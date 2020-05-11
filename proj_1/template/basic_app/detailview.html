@@ -1,0 +1,118 @@
+{% extends 'basic_app/base.html' %}
+
+{% block body_block %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <script language ="javascript" >
+        var tim;
+
+        var min = 4;
+        var sec = 60;
+        var f = new Date();
+        function f1() {
+            f2();
+            document.getElementById("starttime").innerHTML = "Your started your Exam at " + f.getHours() + ":" + f.getMinutes();
+
+
+        }
+        function f2() {
+            if (parseInt(sec) > 0) {
+                sec = parseInt(sec) - 1;
+                document.getElementById("showtime").innerHTML = "Your Left Time  is :"+min+" Minutes ," + sec+" Seconds";
+                tim = setTimeout("f2()", 1000);
+            }
+            else {
+                if (parseInt(sec) == 0) {
+                    min = parseInt(min) - 1;
+                    if (parseInt(min) == 0) {
+                        clearTimeout(tim);
+                        location.href = "default5.aspx";
+                    }
+                    else {
+                        sec = 60;
+                        document.getElementById("showtime").innerHTML = "Your Left Time  is :" + min + " Minutes ," + sec + " Seconds";
+                        tim = setTimeout("f2()", 1000);
+                    }
+                }
+
+            }
+        }
+    </script>
+</head>
+<body onload="f1()" >
+    <form id="form1" runat="server">
+    <div>
+      <table width="100%" align="center">
+        <tr>
+          <td colspan="2">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="starttime"></div><br />
+            <div id="endtime"></div><br />
+            <div id="showtime"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+
+              <br />
+
+
+          </td>
+
+        </tr>
+      </table>
+      <br />
+
+
+    </div>
+    </form>
+</body>
+</html>
+
+<div class="jumbotron">
+  <h1>Subject Name :{{sch.exam_name}}</h1>
+  <ul class='nav navbar nav'>
+    <h4>Exam Details </h4>
+    <li>Number of Questions : {{sch.no_of_ques}}</li>
+    <li>Total Marks : {{sch.total_marks}}</li>
+    <li>Duration : {{sch.time_duration}}</li>
+
+  </ul>
+
+</div>
+
+<div class="jumbotron">
+ <ol>
+   {% for i in sch.exams.all %}
+   <h2>Question {{i.id}}: {{i.question}}</h2>
+   <br>
+   <p>marks:{{i.marks}}</p>
+   <br>
+   <p>Options:</p>
+   <ul>
+     <li><button type="radio">{{i.option1}}</button></li>
+     <li><button type="radio">{{i.option2}}</button></li>
+     <li><button type="radio">{{i.option3}}</button></li>
+     <li><button type="radio">{{i.option4}}</button></li>
+   </ul>
+   <p>
+      <label>Select Answer</label>
+      <select id = "myList">
+        <option value = "1">option 1</option>
+        <option value = "2">option 2</option>
+        <option value = "3">option 3</option>
+        <option value = "4">option 4</option>
+      </select>
+   </p>
+
+   <input type="submit" class = "btn btn-primary" name="" value="save">
+   {% endfor %}
+ </ol>
+</div>
+
+{% endblock %}
